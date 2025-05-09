@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Gestão de Regras</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1, h2 { color: #333; margin-top: 20px; }
+    input, textarea, select, button {
+      margin: 5px 0; padding: 8px; font-size: 14px; width: 100%;
+    }
+    label { font-weight: bold; }
+    .form-group { margin-bottom: 10px; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 15px;
+    }
+    th, td {
+      padding: 8px; border: 1px solid #ccc; text-align: left;
+    }
+    .botao-matriz { /*Para os botões de Comandos ficarem dispostos em uma matriz 3x2*/
+      display: flex;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+    .actions button {
+      flex: 1;
+      font-size: 12px;
+      padding: 6px;
+    }
+    .hidden { display: none; }
+
+  </style>
+</head>
+<body>
+
+  <!-- LISTAGEM -->
+  <div id="tela-listagem">
+    <h1 style="text-align: center;">Gestão de Regras</h1>
+
+    <h2>Pesquisar por Regras</h2>
+    <div>
+      <label>Código:</label>
+      <input type="text" id="codigo" placeholder="Digite o código (dígitos com até 8 caracteres)">
+      <label>Cliente:</label>
+      <input type="text" id="cliente" placeholder="Digite o cliente (texto com até 100 caracteres)">
+      <label>Nome:</label>
+      <input type="text" id="nome" placeholder="Digite o nome (texto com até 100 caracteres)">
+      <button onclick="pesquisar()">Pesquisar</button>
+    </div>
+
+    <h1 style="text-align: center;">Tabela de Tarefas Individuais</h1>
+    <table id="tabelaRegras">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nome</th><th>Descrição</th><th>Cliente</th><th>Código Principal</th><th>Comandos</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button onclick="mostrarCadastro()">Nova Regra</button>
+  </div>
+
+  <!-- CADASTRO -->
+  <div id="tela-cadastro" class="hidden">
+    <h1>Cadastro / Edição de Regra</h1>
+
+    <div class="form-group"><label>ID*</label><input type="text" id="regra-id"></div>
+    <div class="form-group"><label>Nome*</label><input type="text" id="regra-nome"></div>
+    <div class="form-group"><label>Descrição</label><textarea id="regra-desc" rows="3"></textarea></div>
+    <div class="form-group"><label>Cliente</label>
+      <select id="regra-cliente">
+        <option>Planserv</option><option>Postal</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Resposta</label>
+      <select id="regra-resposta">
+        <option>Bloqueio</option><option>Negação</option>
+        <option>Autorização</option><option>Análise</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Texto da Resposta</label><textarea id="regra-texto-resposta" rows="2">O item não foi autorizado por isso e por aquilo...</textarea></div>
+    <div class="form-group"><label>Ativada</label>
+      <select id="regra-ativada">
+        <option>Sim</option><option>Não</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Data de Criação</label>
+      <input type="text" id="regra-criacao" value="12/09/2019 - 9h12" disabled>
+    </div>
+    <div class="form-group"><label>Data de Ativação</label>
+      <input type="text" id="regra-ativacao" value="12/09/2019 - 10h40" disabled>
+    </div>
+    <div class="form-group"><label>Autor</label>
+      <input type="text" id="regra-autor" value="Felipe Moreira" disabled>
+    </div>
+
+    <!-- CONDIÇÕES -->
+    <h2>Condições</h2>
+    <table id="condicoes">
+      <thead>
+        <tr><th>Atributo</th><th>Parâmetros</th><th>Operador</th><th>Valor</th><th>Conector</th><th></th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button onclick="adicionarCondicao()">Adicionar Condição</button>
+
+    <!-- CRITÉRIOS -->
+    <h2>Critérios</h2>
+    <table id="criterios">
+      <thead>
+        <tr><th>Atributo</th><th>Parâmetros</th><th>Operador</th><th>Valor</th><th></th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button onclick="adicionarCriterio()">Adicionar Critério</button>
+
+    <br><br>
+    <button onclick="salvarRegra()">Salvar</button>
+    <button onclick="voltar()">Cancelar</button>
+  </div>
+
+  <!-- VISUALIZAÇÃO -->
+  <div id="tela-visualizar" class="hidden">
+    <h1 style="text-align: center;">Visualizar Regra</h1>
+
+    <div class="form-group"><label>ID</label><input type="text" id="view-id" disabled></div>
+    <div class="form-group"><label>Nome</label><input type="text" id="view-nome" disabled></div>
+    <div class="form-group"><label>Descrição</label><textarea id="view-desc" rows="3" disabled></textarea></div>
+    <div class="form-group"><label>Cliente</label><input type="text" id="view-cliente" disabled></div>
+    <div class="form-group"><label>Resposta</label><input type="text" id="view-resposta" disabled></div>
+    <div class="form-group"><label>Texto da Resposta</label><textarea id="view-texto-resposta" rows="2" disabled></textarea></div>
+    <div class="form-group"><label>Ativada</label><input type="text" id="view-ativada" disabled></div>
+    <div class="form-group"><label>Data de Criação</label><input type="text" id="view-criacao" disabled></div>
+    <div class="form-group"><label>Data de Ativação</label><input type="text" id="view-ativacao" disabled></div>
+    <div class="form-group"><label>Autor</label><input type="text" id="view-autor" disabled></div>
+
+    <h2>Condições</h2>
+    <ul id="view-condicoes"></ul>
+
+    <h2>Critérios</h2>
+    <ul id="view-criterios"></ul>
+
+    <br>
+    <button onclick="voltarDaVisualizacao()">Voltar</button>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
