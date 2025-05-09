@@ -49,5 +49,6 @@ Este projeto é um **protótipo funcional** feito em **HTML, CSS e JavaScript**,
 
 ```bash
 .
-├── index.html         # Arquivo principal com todo o código HTML + JS + CSS
+├── index.html         # Arquivo com o código HTML + CSS
+├── script.js          # Arquivo com o código JS
 ├── README.md          # Este arquivo de instruções
