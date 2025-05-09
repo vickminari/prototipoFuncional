@@ -30,14 +30,14 @@ Este projeto é um **protótipo funcional** feito em **HTML, CSS e JavaScript**,
   - **Condições**
   - **Critérios**
 
-### 🔍 Tela de Visualização
+### Tela de Visualização
 - Mostra todos os dados da regra selecionada
 - Campos desabilitados (somente leitura)
 - Botão para retornar à listagem
 
 ---
 
-## 💡 Tecnologias utilizadas
+## Tecnologias utilizadas
 
 - HTML5
 - CSS3 (com Flexbox para organização de botões)
@@ -45,7 +45,7 @@ Este projeto é um **protótipo funcional** feito em **HTML, CSS e JavaScript**,
 
 ---
 
-## 📂 Organização
+## Organização
 
 ```bash
 .
